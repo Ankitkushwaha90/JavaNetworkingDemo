@@ -5,7 +5,7 @@ import java.net.Socket;
 
 public class PrivateClient {
     public static void main(String[] args) {
-        String serverAddress = "192.168.77.28"; // Private IP address of the server
+        String serverAddress = "127.0.0.1"; // Private IP address of the server
         int serverPort = 8000;
 
         try {
