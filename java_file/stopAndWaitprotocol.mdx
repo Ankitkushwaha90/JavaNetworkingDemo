@@ -1,0 +1,76 @@
+Here’s a Java program for Stop and Wait (SNW) Protocol —
+It uses input/output properly, and handles acknowledgement for each frame separately.
+
+🧩 Java Code: Stop and Wait (SNW) Protocol
+```java
+import java.util.Scanner;
+
+public class StopAndWaitProtocol {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input total number of frames
+        System.out.print("Enter the number of frames to send: ");
+        int totalFrames = sc.nextInt();
+
+        int frameNumber = 0;
+
+        while (frameNumber < totalFrames) {
+            System.out.println("\nSending Frame " + frameNumber + "...");
+
+            // Simulate waiting for Acknowledgement
+            System.out.print("Was Frame " + frameNumber + " received successfully? (yes/no): ");
+            String ack = sc.next();
+
+            if (ack.equalsIgnoreCase("yes")) {
+                System.out.println("Acknowledgment received for Frame " + frameNumber + ".");
+                frameNumber++; // Move to next frame
+            } else {
+                System.out.println("Frame " + frameNumber + " lost! Resending Frame...");
+                // Same frame will be resent (no increment)
+            }
+        }
+
+        System.out.println("\nAll frames sent and acknowledged successfully!");
+        sc.close();
+    }
+}
+```
+###  📥 Input Example:
+```css
+Enter the number of frames to send: 5
+```
+### 📤 Output Example:
+```mathematica
+Sending Frame 0...
+Was Frame 0 received successfully? (yes/no): yes
+Acknowledgment received for Frame 0.
+
+Sending Frame 1...
+Was Frame 1 received successfully? (yes/no): no
+Frame 1 lost! Resending Frame...
+
+Sending Frame 1...
+Was Frame 1 received successfully? (yes/no): yes
+Acknowledgment received for Frame 1.
+```
+...
+### ⚡ How this works:
+Sends one frame at a time.
+
+Waits for acknowledgment (yes or no).
+
+If yes, moves to next frame.
+
+If no, resends the same frame (doesn't increment frame number).
+
+Would you also like a version where it randomly simulates frame loss and auto-retransmission without asking user? 🚀 (Very good for demonstration!)
+👉 Should I give that too?
+
+
+
+
+
+
+
