@@ -1,0 +1,150 @@
+You asked for Stop-and-Wait (SNW) Protocol implementation in Java — with:
+
+## Sender
+
+## Receiver
+
+## Input/Output
+
+Properly handled TCP connection and Acknowledgement (ACK) mechanism.
+
+I'll write it very clearly for easy understanding ✅.
+
+### 📜 Java Program — Stop-and-Wait Protocol (SNW)
+## 1. Sender.java
+```java
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+
+public class Sender {
+    public static void main(String[] args) throws IOException {
+        final int PORT = 6000;
+        ServerSocket serverSocket = new ServerSocket(PORT);
+        System.out.println("Sender is running and waiting for Receiver to connect...");
+
+        Socket socket = serverSocket.accept();
+        System.out.println("Receiver connected!");
+
+        Scanner scanner = new Scanner(System.in);
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        System.out.print("Enter the number of frames to send: ");
+        int totalFrames = scanner.nextInt();
+        scanner.nextLine(); // consume leftover newline
+
+        for (int frame = 0; frame < totalFrames; frame++) {
+            System.out.println("Sending frame: " + frame);
+            out.println(frame); // Send frame
+
+            String ack = in.readLine(); // Wait for ACK
+            if (ack != null && ack.equals("ACK" + frame)) {
+                System.out.println("Acknowledgment received for frame: " + frame);
+            } else {
+                System.out.println("Acknowledgment failed for frame: " + frame);
+                frame--; // Resend same frame
+            }
+        }
+
+        System.out.println("All frames sent successfully!");
+
+        // Closing everything
+        socket.close();
+        serverSocket.close();
+        scanner.close();
+    }
+}
+```
+### 2. Receiver.java
+```java
+import java.io.*;
+import java.net.*;
+
+public class Receiver {
+    public static void main(String[] args) throws IOException {
+        final String SERVER = "localhost"; // or Server IP
+        final int PORT = 6000;
+
+        Socket socket = new Socket(SERVER, PORT);
+        System.out.println("Connected to Sender!");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+        while (true) {
+            String receivedFrame = in.readLine();
+
+            if (receivedFrame == null) {
+                break;
+            }
+
+            System.out.println("Received frame: " + receivedFrame);
+
+            // Send ACK
+            out.println("ACK" + receivedFrame);
+            System.out.println("Sent acknowledgment: ACK" + receivedFrame);
+        }
+
+        System.out.println("All frames received successfully!");
+        socket.close();
+    }
+}
+```
+### 🖥️ Sample Input/Output
+## ➡️ Sender side
+```bash
+> javac Sender.java
+> java Sender
+Sender is running and waiting for Receiver to connect...
+Receiver connected!
+Enter the number of frames to send: 5
+Sending frame: 0
+Acknowledgment received for frame: 0
+Sending frame: 1
+Acknowledgment received for frame: 1
+Sending frame: 2
+Acknowledgment received for frame: 2
+Sending frame: 3
+Acknowledgment received for frame: 3
+Sending frame: 4
+Acknowledgment received for frame: 4
+All frames sent successfully!
+```
+### ➡️ Receiver side
+```bash
+> javac Receiver.java
+> java Receiver
+Connected to Sender!
+Received frame: 0
+Sent acknowledgment: ACK0
+Received frame: 1
+Sent acknowledgment: ACK1
+Received frame: 2
+Sent acknowledgment: ACK2
+Received frame: 3
+Sent acknowledgment: ACK3
+Received frame: 4
+Sent acknowledgment: ACK4
+All frames received successfully!
+```
+### 🔥 How It Works?
+
+Step	Explanation
+Sender	Sends 1 frame, waits for ACK
+Receiver	Receives frame, sends back ACK
+If ACK received	Sender sends next frame
+If ACK not received (simulated)	Sender resends frame
+After all frames	Both sides close
+### ✅ Important Points
+Stop-and-Wait = send one frame, wait for ACK, then next frame.
+
+ACK loss simulation is simple (can be extended if you want).
+
+Reliable delivery guaranteed via acknowledgment.
+
+### ⚡ Bonus
+If you want, I can also provide a version that randomly drops ACKs to simulate errors and resend frames automatically!
+
+Would you like that advanced error simulation version also? 🚀
+(It's very good for understanding how SNW handles packet loss!)
