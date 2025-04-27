@@ -1,0 +1,104 @@
+I’ll give you a full Java program — using TCP Sockets where:
+
+Server sends current Date and Time to the client.
+
+Client connects, receives the Date and Time, and displays it.
+
+I'll also show the expected input/output.
+
+## 🛠 Java TCP Socket Program — Date and Time
+### 1️⃣ Server Code (DateTimeServer.java)
+```java
+import java.io.*;
+import java.net.*;
+import java.util.Date;
+
+public class DateTimeServer {
+    public static void main(String[] args) {
+        final int PORT = 5000; // You can change port if needed
+
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            System.out.println("Server started. Waiting for client connection...");
+
+            // Accept client connection
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Client connected: " + clientSocket.getInetAddress());
+
+            // Prepare data to send
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            Date currentDate = new Date();
+            out.println("Server Date and Time: " + currentDate.toString());
+
+            // Close connections
+            out.close();
+            clientSocket.close();
+            System.out.println("Data sent to client. Server closing connection.");
+
+        } catch (IOException e) {
+            System.out.println("Server Error: " + e.getMessage());
+        }
+    }
+}
+```
+### 2️⃣ Client Code (DateTimeClient.java)
+```java
+import java.io.*;
+import java.net.*;
+
+public class DateTimeClient {
+    public static void main(String[] args) {
+        final String SERVER_ADDRESS = "localhost"; // or IP address if different machine
+        final int PORT = 5000;
+
+        try (Socket socket = new Socket(SERVER_ADDRESS, PORT)) {
+            System.out.println("Connected to server.");
+
+            // Receive data from server
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String serverMessage = in.readLine();
+            System.out.println("Message from Server: " + serverMessage);
+
+            // Close connections
+            in.close();
+        } catch (IOException e) {
+            System.out.println("Client Error: " + e.getMessage());
+        }
+    }
+}
+```
+### 📥 Input/Output Example
+- Server Side:
+```bash
+> javac DateTimeServer.java
+> java DateTimeServer
+Server started. Waiting for client connection...
+Client connected: /127.0.0.1
+Data sent to client. Server closing connection.
+```
+- Client Side:
+```bash
+> javac DateTimeClient.java
+> java DateTimeClient
+Connected to server.
+```
+Message from Server: Server Date and Time: Sat Apr 26 17:30:23 IST 2025
+### ✅ How it works
+Server waits on port 5000.
+
+Client connects to that port.
+
+Server sends the current date and time.
+
+Client receives and displays the date/time.
+
+### ⚡ Important Notes:
+First start the server.
+
+Then start the client.
+
+If you want server and client on different computers, replace localhost with server's IP address.
+
+Would you also like a version where:
+
+Client sends a request ("Send me date and time") and server responds? 👉 (It looks more professional, if you want for project submission!) 🚀
+Should I give that too?
