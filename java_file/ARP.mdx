@@ -1,0 +1,85 @@
+Here’s the same ARP Protocol Simulation program written in Java, taking input and output properly:
+
+✨ Java Program: ARP Protocol Simulation
+```java
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class ARPSimulation {
+
+    public static void main(String[] args) {
+        // Step 1: Create a HashMap to store IP -> MAC mapping
+        HashMap<String, String> arpTable = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+
+        // Step 2: Get number of entries
+        System.out.print("Enter the number of ARP table entries: ");
+        int n = scanner.nextInt();
+        scanner.nextLine(); // consume the leftover newline
+
+        // Step 3: Input IP and MAC address pairs
+        for (int i = 1; i <= n; i++) {
+            System.out.print("Enter IP address " + i + ": ");
+            String ip = scanner.nextLine();
+            System.out.print("Enter MAC address " + i + ": ");
+            String mac = scanner.nextLine();
+            arpTable.put(ip, mac);
+        }
+
+        // Step 4: Display the ARP table
+        System.out.println("\n--- ARP Table ---");
+        for (String ip : arpTable.keySet()) {
+            System.out.println("IP Address: " + ip + " -> MAC Address: " + arpTable.get(ip));
+        }
+
+        // Step 5: Search for a MAC address
+        System.out.print("\nEnter IP address to search for MAC address: ");
+        String searchIp = scanner.nextLine();
+
+        // Step 6: Lookup and output
+        if (arpTable.containsKey(searchIp)) {
+            System.out.println("The MAC address for IP " + searchIp + " is: " + arpTable.get(searchIp));
+        } else {
+            System.out.println("MAC address for IP " + searchIp + " not found in ARP table.");
+        }
+
+        scanner.close();
+    }
+}
+```
+## ✅ Example Input/Output
+Input:
+
+```ruby
+Enter the number of ARP table entries: 2
+Enter IP address 1: 192.168.0.1
+Enter MAC address 1: AA:BB:CC:DD:EE:01
+Enter IP address 2: 192.168.0.2
+Enter MAC address 2: AA:BB:CC:DD:EE:02
+```
+ARP Table Output:
+
+```ruby
+--- ARP Table ---
+IP Address: 192.168.0.1 -> MAC Address: AA:BB:CC:DD:EE:01
+IP Address: 192.168.0.2 -> MAC Address: AA:BB:CC:DD:EE:02
+```
+Search:
+
+```css
+Enter IP address to search for MAC address: 192.168.0.1
+```
+Result:
+
+```ruby
+The MAC address for IP 192.168.0.1 is: AA:BB:CC:DD:EE:01
+```
+## 🚀 Notes:
+HashMap is used to store the IP and MAC mapping efficiently.
+
+Scanner is used to take input from the user.
+
+It handles strings properly (IP and MAC addresses are entered as text).
+
+Would you also like a little more advanced Java version where it simulates an ARP request and ARP reply automatically (like real communication)? 🚀
+I can make that too if you want! 🔥
