@@ -1,0 +1,95 @@
+Let's write a Java program to simulate RARP (Reverse ARP Protocol).
+
+## 📖 What is RARP?
+RARP (Reverse Address Resolution Protocol) is used when a device knows its MAC address but does not know its IP address.
+
+The device sends a RARP request with its MAC address, and the server responds with the corresponding IP address.
+
+✨ Java Program: RARP Protocol Simulation
+```java
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class RARPSimulation {
+
+    public static void main(String[] args) {
+        // Step 1: Create a HashMap to store MAC -> IP mapping
+        HashMap<String, String> rarpTable = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+
+        // Step 2: Input the number of entries
+        System.out.print("Enter the number of RARP table entries: ");
+        int n = scanner.nextInt();
+        scanner.nextLine(); // Consume newline character
+
+        // Step 3: Input MAC and IP address pairs
+        for (int i = 1; i <= n; i++) {
+            System.out.print("Enter MAC address " + i + ": ");
+            String mac = scanner.nextLine();
+            System.out.print("Enter IP address " + i + ": ");
+            String ip = scanner.nextLine();
+            rarpTable.put(mac, ip);
+        }
+
+        // Step 4: Display the RARP table
+        System.out.println("\n--- RARP Table ---");
+        for (String mac : rarpTable.keySet()) {
+            System.out.println("MAC Address: " + mac + " -> IP Address: " + rarpTable.get(mac));
+        }
+
+        // Step 5: Search for an IP address based on MAC
+        System.out.print("\nEnter MAC address to search for IP address: ");
+        String searchMac = scanner.nextLine();
+
+        // Step 6: Lookup and output
+        if (rarpTable.containsKey(searchMac)) {
+            System.out.println("The IP address for MAC " + searchMac + " is: " + rarpTable.get(searchMac));
+        } else {
+            System.out.println("IP address for MAC " + searchMac + " not found in RARP table.");
+        }
+
+        scanner.close();
+    }
+}
+```
+## ✅ Example Input/Output
+Input:
+
+```ruby
+Enter the number of RARP table entries: 2
+Enter MAC address 1: AA:BB:CC:DD:EE:01
+Enter IP address 1: 192.168.1.10
+Enter MAC address 2: AA:BB:CC:DD:EE:02
+Enter IP address 2: 192.168.1.20
+```
+RARP Table:
+
+```ruby
+--- RARP Table ---
+MAC Address: AA:BB:CC:DD:EE:01 -> IP Address: 192.168.1.10
+MAC Address: AA:BB:CC:DD:EE:02 -> IP Address: 192.168.1.20
+```
+Search:
+
+```ruby
+Enter MAC address to search for IP address: AA:BB:CC:DD:EE:02
+```
+Output:
+
+```ruby
+The IP address for MAC AA:BB:CC:DD:EE:02 is: 192.168.1.20
+```
+###🚀 Key Points:
+HashMap<String, String> is used here for MAC → IP mapping.
+
+Very similar to the ARP simulation, but reverse direction.
+
+Good for practical lab programs and exam practice!
+
+Would you also like me to show you a combined ARP + RARP simulation Java program? (both in one!) 🚀
+It would be very useful if you want an even better and bigger project! 🎯
+Shall I show it? 🌟
+
+
+
+
