@@ -1,0 +1,75 @@
+Here’s the full Input and Output description for your Java programs (Client.java and MyServer.java) for connection establishment:
+
+## 📋 Question:
+Write a Java program for connection establishment between client and server.
+
+## 🖥️ Java Programs:
+Server Side — MyServer.java
+```java
+import java.io.*;
+import java.net.*;
+
+public class MyServer {
+    public static void main(String[] args) {
+        try {
+            ServerSocket ss = new ServerSocket(6666);
+            Socket s = ss.accept();
+
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+            String str = dis.readUTF();
+
+            System.out.println("Message = " + str);
+
+            dis.close();
+            s.close();
+            ss.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+```
+Client Side — Client.java
+```java
+import java.io.*;
+import java.net.*;
+
+public class Client {
+    public static void main(String[] args) {
+        try {
+            Socket s = new Socket("localhost", 6666);
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+
+            dout.writeUTF("Hello Server");
+            dout.flush();
+            dout.close();
+            s.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+```
+## 📥 Input:
+There is no manual input from the user during runtime.
+The client automatically sends the message "Hello Server" to the server.
+
+## 📤 Output (on Server Side):
+When you run the server program, and then run the client program, the server will print:
+
+```ini
+Message = Hello Server
+```
+(Server receives and displays the message sent by client.)
+
+### 📦 Summary Table:
+
+Aspect	Description
+Input	Client automatically sends message "Hello Server"
+Output (on Server)	Message = Hello Server
+✅ So your program establishes the connection, sends a message, and receives it — exactly as required!
+
+Would you also like me to show a diagram 🧩 that explains visually how connection flow happens?
+(Like: Client → Server connection diagram 📶)
+It can help you if you are submitting this in a project or assignment! 🚀
+Want it?
