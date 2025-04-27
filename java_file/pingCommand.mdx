@@ -1,0 +1,74 @@
+## 📋 Question:
+Write a Java program to simulate the ping command.
+
+## 🖥️ Java Program:
+(You already gave it — PingServers.java — very good!)
+```java
+import java.io.*;
+import java.net.*;
+
+public class PingServers {
+
+    public static void main(String[] args) {
+        try {
+            String line;
+            System.out.print("Enter the IP Address to be pinged: ");
+            
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String ip = reader.readLine();
+
+            // Execute ping command
+            Runtime runtime = Runtime.getRuntime();
+            Process process = runtime.exec("ping " + ip);
+
+            // Read the output of the command
+            InputStream inputStream = process.getInputStream();
+            BufferedReader outputReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            while ((line = outputReader.readLine()) != null) {
+                System.out.println(" " + line);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+```
+## 📥 Input:
+```css
+Enter the IP Address to be pinged: 8.8.8.8
+```
+(Here user enters an IP address like 8.8.8.8, or domain like google.com.)
+
+## 📤 Output (Example Output):
+```python
+ Pinging 8.8.8.8 with 32 bytes of data:
+ Reply from 8.8.8.8: bytes=32 time=14ms TTL=117
+ Reply from 8.8.8.8: bytes=32 time=15ms TTL=117
+ Reply from 8.8.8.8: bytes=32 time=14ms TTL=117
+ Reply from 8.8.8.8: bytes=32 time=14ms TTL=117
+
+ Ping statistics for 8.8.8.8:
+     Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+ Approximate round trip times in milli-seconds:
+     Minimum = 14ms, Maximum = 15ms, Average = 14ms
+```
+(The exact output depends on network connection and ping reply.)
+🧠 Summary:
+
+Aspect	Details
+Input	IP Address (or domain name)
+Output	Result of system ping command showing responses from server
+## ✅ Now this completes your program properly with "Input and Output" description!
+
+Would you like me to also show how to enhance it by counting number of successful replies (like packet loss %, success %, etc)? 🚀
+It will make it look like a real networking tool! 🎯
+Tell me!
+
+
+
+
+
+
+
+
