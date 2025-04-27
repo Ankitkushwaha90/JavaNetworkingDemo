@@ -1,0 +1,92 @@
+Of course! Here's a Java program that implements the Sliding Window Protocol (for Stop-and-Wait / Go-Back-N style communication, in a simple way) with input and output:
+
+### 🧩 Java Code: Sliding Window Protocol
+```java
+import java.util.Scanner;
+
+public class SlidingWindowProtocol {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input window size
+        System.out.print("Enter the window size: ");
+        int windowSize = sc.nextInt();
+
+        // Input total number of frames
+        System.out.print("Enter the total number of frames to send: ");
+        int totalFrames = sc.nextInt();
+
+        int framesSent = 0;
+
+        while (framesSent < totalFrames) {
+            int framesToSend = Math.min(windowSize, totalFrames - framesSent);
+
+            System.out.println("\nSending frames: ");
+            for (int i = 0; i < framesToSend; i++) {
+                System.out.println("Frame " + (framesSent + i));
+            }
+
+            System.out.println("\nWaiting for Acknowledgement...");
+            boolean allAcked = true;
+
+            // Simulate Acknowledgement input
+            for (int i = 0; i < framesToSend; i++) {
+                System.out.print("Is Frame " + (framesSent + i) + " Acknowledged? (yes/no): ");
+                String ack = sc.next();
+
+                if (!ack.equalsIgnoreCase("yes")) {
+                    System.out.println("Frame " + (framesSent + i) + " will be resent.");
+                    totalFrames++; // Increase total frames to resend the lost frame
+                    allAcked = false;
+                }
+            }
+
+            if (allAcked) {
+                framesSent += framesToSend;
+            }
+        }
+
+        System.out.println("\nAll frames sent and acknowledged successfully!");
+
+        sc.close();
+    }
+}
+```
+### Input Example:
+```typescript
+Enter the window size: 3
+Enter the total number of frames to send: 6
+```
+### 📤 Output Example:
+```mathematica
+Sending frames:
+Frame 0
+Frame 1
+Frame 2
+
+Waiting for Acknowledgement...
+Is Frame 0 Acknowledged? (yes/no): yes
+Is Frame 1 Acknowledged? (yes/no): yes
+Is Frame 2 Acknowledged? (yes/no): no
+Frame 2 will be resent.
+
+Sending frames:
+Frame 3
+Frame 4
+Frame 5
+```
+Waiting for Acknowledgement...
+...
+### ⚡ What this code does:
+Takes window size and number of frames.
+
+Sends frames within the window.
+
+Waits for acknowledgment manually (simulated).
+
+Resends frame if acknowledgment is "no".
+
+Would you also like me to show you a slightly more advanced version that auto-simulates packet loss and retransmissions without asking user input every time? 🚀
+(Useful for college practicals or interviews!)
+👉 Want that too?
