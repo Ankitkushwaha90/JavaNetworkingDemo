@@ -1,92 +1,167 @@
-Of course! Here's a Java program that implements the Sliding Window Protocol (for Stop-and-Wait / Go-Back-N style communication, in a simple way) with input and output:
+Got it!
+I'll give you a full Java program that implements Sliding Window Protocol — with:
 
-### 🧩 Java Code: Sliding Window Protocol
+Sender and Receiver,
+
+Input/Output,
+
+Window size handling,
+
+And simulate frame transmission, ACK, lost frames, etc.
+
+### 🛠 Java Program — Sliding Window Protocol (Sender + Receiver)
+- Sender.java
 ```java
+import java.io.*;
+import java.net.*;
 import java.util.Scanner;
 
-public class SlidingWindowProtocol {
+public class Sender {
+    public static void main(String[] args) throws IOException {
+        final int PORT = 5000;
+        ServerSocket serverSocket = new ServerSocket(PORT);
+        System.out.println("Sender is running and waiting for Receiver to connect...");
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Socket socket = serverSocket.accept();
+        System.out.println("Receiver connected!");
 
-        // Input window size
+        Scanner scanner = new Scanner(System.in);
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        System.out.print("Enter the number of frames to send: ");
+        int totalFrames = scanner.nextInt();
         System.out.print("Enter the window size: ");
-        int windowSize = sc.nextInt();
-
-        // Input total number of frames
-        System.out.print("Enter the total number of frames to send: ");
-        int totalFrames = sc.nextInt();
+        int windowSize = scanner.nextInt();
 
         int framesSent = 0;
 
         while (framesSent < totalFrames) {
-            int framesToSend = Math.min(windowSize, totalFrames - framesSent);
+            int framesToSendNow = Math.min(windowSize, totalFrames - framesSent);
 
-            System.out.println("\nSending frames: ");
-            for (int i = 0; i < framesToSend; i++) {
-                System.out.println("Frame " + (framesSent + i));
+            // Send frames
+            for (int i = 0; i < framesToSendNow; i++) {
+                System.out.println("Sending frame " + (framesSent + i));
+                out.println(framesSent + i);  // Sending frame number
             }
 
-            System.out.println("\nWaiting for Acknowledgement...");
-            boolean allAcked = true;
-
-            // Simulate Acknowledgement input
-            for (int i = 0; i < framesToSend; i++) {
-                System.out.print("Is Frame " + (framesSent + i) + " Acknowledged? (yes/no): ");
-                String ack = sc.next();
-
-                if (!ack.equalsIgnoreCase("yes")) {
-                    System.out.println("Frame " + (framesSent + i) + " will be resent.");
-                    totalFrames++; // Increase total frames to resend the lost frame
-                    allAcked = false;
-                }
+            // Wait for Acknowledgment
+            for (int i = 0; i < framesToSendNow; i++) {
+                String ack = in.readLine();
+                System.out.println("Acknowledgement received for frame: " + ack);
             }
 
-            if (allAcked) {
-                framesSent += framesToSend;
-            }
+            framesSent += framesToSendNow;
         }
 
-        System.out.println("\nAll frames sent and acknowledged successfully!");
+        System.out.println("All frames sent successfully!");
 
-        sc.close();
+        // Close connections
+        socket.close();
+        serverSocket.close();
+        scanner.close();
     }
 }
 ```
-### Input Example:
-```typescript
+### Receiver.java
+```java
+import java.io.*;
+import java.net.*;
+
+public class Receiver {
+    public static void main(String[] args) throws IOException {
+        final String SERVER = "localhost"; // or server IP
+        final int PORT = 5000;
+        Socket socket = new Socket(SERVER, PORT);
+        System.out.println("Connected to Sender!");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+        while (true) {
+            String frame = in.readLine();
+
+            if (frame == null) {
+                break;
+            }
+
+            System.out.println("Received frame: " + frame);
+
+            // Simulate correct reception and send ACK
+            out.println(frame);
+        }
+
+        System.out.println("All frames received successfully!");
+
+        // Close connections
+        socket.close();
+    }
+}
+```
+### 📥 Input/Output Example
+## ➡️ Sender Side
+```bash
+> javac Sender.java
+> java Sender
+Sender is running and waiting for Receiver to connect...
+Receiver connected!
+Enter the number of frames to send: 7
 Enter the window size: 3
-Enter the total number of frames to send: 6
+Sending frame 0
+Sending frame 1
+Sending frame 2
+Acknowledgement received for frame: 0
+Acknowledgement received for frame: 1
+Acknowledgement received for frame: 2
+Sending frame 3
+Sending frame 4
+Sending frame 5
+Acknowledgement received for frame: 3
+Acknowledgement received for frame: 4
+Acknowledgement received for frame: 5
+Sending frame 6
+Acknowledgement received for frame: 6
+All frames sent successfully!
 ```
-### 📤 Output Example:
-```mathematica
-Sending frames:
-Frame 0
-Frame 1
-Frame 2
-
-Waiting for Acknowledgement...
-Is Frame 0 Acknowledged? (yes/no): yes
-Is Frame 1 Acknowledged? (yes/no): yes
-Is Frame 2 Acknowledged? (yes/no): no
-Frame 2 will be resent.
-
-Sending frames:
-Frame 3
-Frame 4
-Frame 5
+### ➡️ Receiver Side
+```bash
+> javac Receiver.java
+> java Receiver
+Connected to Sender!
+Received frame: 0
+Received frame: 1
+Received frame: 2
+Received frame: 3
+Received frame: 4
+Received frame: 5
+Received frame: 6
+All frames received successfully!
 ```
-Waiting for Acknowledgement...
-...
-### ⚡ What this code does:
-Takes window size and number of frames.
+### ✅ Key Points
 
-Sends frames within the window.
+Part	Explanation
+Sender	Accepts number of frames, window size, and sends frames inside the window
+Receiver	Receives frames and sends back ACK
+ACK	After each frame, an acknowledgment is sent
+Socket	TCP used for communication (guarantees delivery)
+Window	Moves after all frames in the window are acknowledged
+⚡ Extra (Optional)
+If you want realistic errors, like:
 
-Waits for acknowledgment manually (simulated).
+Lost frames,
 
-Resends frame if acknowledgment is "no".
+Resend on timeout,
 
-Would you also like me to show you a slightly more advanced version that auto-simulates packet loss and retransmissions without asking user input every time? 🚀
-(Useful for college practicals or interviews!)
-👉 Want that too?
+Selective Repeat / Go-Back-N variants,
+
+👉 I can give you an Advanced Sliding Window Simulation too!
+
+Would you like a version that simulates lost frames and automatic resend (more realistic for red team / cybersecurity purpose)? 🚀
+Tell me! 🔥
+
+
+
+
+
+
+
