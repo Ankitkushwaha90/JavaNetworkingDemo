@@ -1,0 +1,103 @@
+Here’s a simple Java program using TCP Sockets where:
+
+Server sends current Date and Time to the Client.
+
+Client receives and displays it.
+
+### ✅ Full program ✅ Clear input/output ✅ TCP socket-based communication.
+
+## 📜 Java Code
+### 1. Server.java (Date and Time Server)
+```java
+import java.io.*;
+import java.net.*;
+import java.util.Date;
+
+public class Server {
+    public static void main(String[] args) {
+        final int PORT = 5000;
+
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            System.out.println("Server is running and waiting for a client...");
+
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Client connected!");
+
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+            // Send current Date and Time
+            Date date = new Date();
+            out.println("Current Date and Time: " + date.toString());
+
+            System.out.println("Date and Time sent to client!");
+
+            clientSocket.close();
+        } catch (IOException e) {
+            System.out.println("Server Error: " + e.getMessage());
+        }
+    }
+}
+```
+### 2. Client.java (Receives Date and Time)
+```java
+import java.io.*;
+import java.net.*;
+
+public class Client {
+    public static void main(String[] args) {
+        final String SERVER = "localhost"; // Change IP if server on different machine
+        final int PORT = 5000;
+
+        try (Socket socket = new Socket(SERVER, PORT)) {
+            System.out.println("Connected to server!");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            String serverMessage = in.readLine();
+            System.out.println("Server says: " + serverMessage);
+
+        } catch (IOException e) {
+            System.out.println("Client Error: " + e.getMessage());
+        }
+    }
+}
+```
+## 🖥️ Sample Input/Output
+### ➡️ Server Side
+```bash
+> javac Server.java
+> java Server
+Server is running and waiting for a client...
+Client connected!
+Date and Time sent to client!
+```
+### ➡️ Client Side
+```bash
+> javac Client.java
+> java Client
+Connected to server!
+Server says: Current Date and Time: Sun Apr 27 14:53:02 IST 2025
+```
+### ✅ Important Points
+Server listens on port 5000.
+
+Client connects to server on localhost (127.0.0.1).
+
+Server sends the current Date and Time only once and closes.
+
+You can modify it easily to send continuously if you want (ask me if you want that 🚀).
+
+### 📢 How to run?
+Open two terminals:
+
+Terminal 1: run Server.java
+
+Terminal 2: run Client.java
+
+### ⚡ Bonus Idea
+If you want, I can also give:
+
+Server continuously sends date and time every second (live clock).
+
+Client keeps receiving live date-time updates!
+Would you like that advanced version too? 🚀✨
